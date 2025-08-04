@@ -37,7 +37,7 @@ export default function ChatPage() {
 
             const aiMessage = { role: "ai", content: data.response };
 
-            if (loading) setMessages((prev) => [...prev, aiMessage])
+            setMessages((prev) => [...prev, aiMessage])
         } catch (err) {
             console.error("Chat error:", err);
         } finally {

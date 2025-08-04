@@ -26,7 +26,9 @@ const UserFormPage = () => {
         const formData = new FormData();
         formData.append("name", name);
         formData.append("email", email);
-        formData.append("image", image);
+        if (image) {
+            formData.append("image", image);
+        }
         console.log(formData);
 
         const res = await fetch("/api/user", {

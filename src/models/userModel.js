@@ -12,6 +12,10 @@ const userSchema = mongoose.Schema({
     photo: {
         type: String,
         default: "/uploads/default_user.jpg"
+    },
+    queries: {
+        type: Number,
+        default: 0
     }
 },
     {
