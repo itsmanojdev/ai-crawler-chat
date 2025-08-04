@@ -1,6 +1,7 @@
 
 // import { MongoClient, ServerApiVersion } from "mongodb";
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+import 'dotenv/config'
 
 // Database Connection
 mongoose.connect(process.env.MONGODB_URL)

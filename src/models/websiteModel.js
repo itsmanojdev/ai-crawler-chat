@@ -20,6 +20,6 @@ const websiteSchema = mongoose.Schema({
     }
 )
 
-const websiteModel = mongoose.model('website', websiteSchema)
+const websiteModel = mongoose.model('Website', websiteSchema)
 
 export default websiteModel

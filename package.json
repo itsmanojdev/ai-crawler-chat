@@ -2,14 +2,17 @@
   "name": "ai-crawler-chat",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "poc": "node ./src/lib/poc.js",
+    "crawl": "node ./src/lib/crawler.js",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^17.2.1",
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.0",
     "next": "15.4.5",

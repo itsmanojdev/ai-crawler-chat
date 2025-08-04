@@ -1,9 +1,14 @@
-import mongoose from "mongoose";
+import "./mongodb.js"
+import websiteModel from "../models/websiteModel.js"
 
-const getWebsites = () => {
+const getWebsites = async () => {
+    try {
+        let websites = await websiteModel.find({}).exec()
+        return websites;
+    } catch (error) {
+        console.log("Fetch Error: ", error.message)
 
-    let websites = ["https://course-listing-two.vercel.app/", "https://www.scrapethissite.com/pages/simple/", "https://quotes.toscrape.com/"]
-    return ["https://quotes.toscrape.com/"];
+    }
 }
 
 export {
