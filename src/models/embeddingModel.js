@@ -25,6 +25,6 @@ const embeddingSchema = mongoose.Schema({
     }
 )
 
-const embeddingModel = mongoose.model('Embedding', embeddingSchema)
+const embeddingModel = mongoose.models.Embedding || mongoose.model('Embedding', embeddingSchema)
 
 export default embeddingModel

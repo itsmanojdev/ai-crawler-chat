@@ -1,6 +1,8 @@
 import { Rubik, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./Components/ui/Navigation";
+import { connectdb } from "../lib/mongodb";
+
 
 export const inter = Inter({ subsets: ['latin'] });
 export const rubik = Rubik({ subsets: ['latin'] });
@@ -10,7 +12,9 @@ export const metadata = {
   description: "AI Crawler Chat by",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  await connectdb()
+
   return (
     <html lang="en">
       <head>
@@ -23,7 +27,7 @@ export default function RootLayout({ children }) {
           <Navigation />
         </header>
 
-        <main className="px-8 flex-1 flex flex-col sm:px-16">
+        <main className="px-8 py-4 flex-1 flex flex-col sm:px-16">
           {children}
         </main>
       </body>

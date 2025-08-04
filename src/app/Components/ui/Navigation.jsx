@@ -10,8 +10,10 @@ export default function Navigation() {
                     <Link href="/" className="animate">
                         <Logo className="text-white" />
                     </Link>
-                    <div className="flex gap-8">
+                    <div className="flex gap-4">
+                        <NavLink href="/" text="Home" />
                         <NavLink href="/chat" text="Chat" />
+                        <NavLink href="/user" text="User" />
                     </div>
                 </div>
             </div>

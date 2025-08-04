@@ -25,7 +25,7 @@ const AIChat = async (websiteID, userQuery) => {
                     path: 'embedding',
                     queryVector: embedding,
                     numCandidates: 100, // Number of candidates to consider
-                    limit: 3, // Number of results to return
+                    limit: 2, // Number of results to return
                     filter: {
                         domain: new mongoose.Types.ObjectId(websiteID)
                     }
