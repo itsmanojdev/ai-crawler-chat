@@ -10,7 +10,7 @@ const CRAWL_TYPE = {
     DOMAIN: "Domain"    // Crawl entire domain - recursively call all the domain url present it the page
 }
 
-const CRAWL_LIMIT = 50
+const CRAWL_LIMIT = 10  // Deep of recursive crawl
 
 export {
     CRAWL_STATUS,

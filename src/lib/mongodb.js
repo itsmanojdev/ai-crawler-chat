@@ -3,15 +3,25 @@
 import mongoose from "mongoose"
 import 'dotenv/config'
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URL)
-    .then(() => {
+const connectdb = async () => {
+    // Database Connection
+    try {
+        await mongoose.connect(process.env.MONGODB_URL)
         console.log("MonogoDB Connection Success")
-    })
-    .catch((error) => {
+    } catch (error) {
         console.log("ERROR while connecting to DB: ", error.message)
-    })
+    }
+}
 
+const disconnectdb = () => {
+    console.log("MonogoDB Disconnecting");
+    mongoose.disconnect();
+}
+
+export {
+    connectdb,
+    disconnectdb
+}
 
 // // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 // const client = new MongoClient(uri, {

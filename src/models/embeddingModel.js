@@ -3,8 +3,8 @@ import { CRAWL_STATUS, CRAWL_TYPE } from "../constants.js";
 
 const embeddingSchema = mongoose.Schema({
     domain: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Website'
     },
     website_url: {
         type: String,

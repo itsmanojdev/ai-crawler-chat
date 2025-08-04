@@ -1,25 +1,38 @@
-/***********************
- * Takes url and gives url with only domain and the path *
- **********************/
+/**
+ * Takes url and gives url with only domain and the path
+ * @param {String} url - website URL
+ * @returns - Normalized URL
+ */
 const normalizeURL = (url) => {
-    const urlObj = new URL(url);
-    const normalizedURL = `${urlObj.hostname}${urlObj.pathname}`
-    if (normalizedURL.length && normalizedURL.slice(-1) === '/') {
-        return normalizedURL.slice(0, -1)
+    try {
+        const urlObj = new URL(url);
+        const normalizedURL = `${urlObj.hostname}${urlObj.pathname}`
+        if (normalizedURL.length && normalizedURL.slice(-1) === '/') {
+            return normalizedURL.slice(0, -1)
+        }
+        return normalizedURL
+    } catch (error) {
+        console.log(`Invalid URL passed: ${url}`);
     }
-    return normalizedURL
 }
 
-/***********************
- * Get array of chunck from text *
- **********************/
-const getChuncks = (text, maxChunkSize = 500, overlap = 50) => {
+/**
+ * Get array of chunk from text
+ * @param {string} text 
+ * @param {number} maxChunkSize 
+ * @param {number} overlap 
+ * @returns [string]
+ */
+const getChunks = (text, maxChunkSize = 500, overlap = 50) => {
     const chunks = [];
-    let start = 0;
+    let start = 0, stopFlag = false
 
     // If text is not fully parsed
-    while (start < text.length) {
+    while (start < text.length && !stopFlag) {
         let end = Math.min(start + maxChunkSize, text.length);
+        if (end == text.length) {
+            stopFlag = true
+        }
         let chunk = text.slice(start, end).trim();
 
         // Avoid splitting words
@@ -40,5 +53,5 @@ const getChuncks = (text, maxChunkSize = 500, overlap = 50) => {
 
 export {
     normalizeURL,
-    getChuncks
+    getChunks
 }
