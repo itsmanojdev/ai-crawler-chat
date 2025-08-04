@@ -1,13 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WebsiteDropdown from "../Components/ui/WebsiteDropdown";
+import Image from 'next/image'
+import { useChat } from "../context/ChatContext";
 
 export default function ChatPage() {
+    const [user, setUser] = useState({ photo: "/uploads/default_user.jpg" });
     const [selectedWebsite, setSelectedWebsite] = useState("");
-    const [messages, setMessages] = useState([]);
+    const { messages, setMessages } = useChat();
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("chatUser");
+        if (stored) setUser(JSON.parse(stored));
+    }, []);
 
     const sendMessage = async () => {
         if (!input.trim() || loading || !selectedWebsite) return;
@@ -21,7 +29,7 @@ export default function ChatPage() {
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: input, websiteId: selectedWebsite }),
+                body: JSON.stringify({ user: user, query: input, websiteId: selectedWebsite }),
             });
 
             const data = await res.json();
@@ -29,7 +37,7 @@ export default function ChatPage() {
 
             const aiMessage = { role: "ai", content: data.response };
 
-            setMessages((prev) => [...prev, aiMessage]);
+            if (loading) setMessages((prev) => [...prev, aiMessage])
         } catch (err) {
             console.error("Chat error:", err);
         } finally {
@@ -46,22 +54,61 @@ export default function ChatPage() {
     return (
         <div className="w-full flex flex-col gap-4 bg-white p-6 rounded-2xl shadow-md border border-sky-200">
             <div className="text-xl font-semibold text-sky-700">AI Chat Assistant</div>
-
+            {user && (
+                <div className="flex gap-2 bg-sky-100 border border-sky-400 text-sky-700 px-4 py-3 mb-4 rounded">
+                    <div className="size-8">
+                        <Image
+                            src={user.photo}
+                            alt={user.name}
+                            className="size-full rounded-full object-cover"
+                            width={40} height={40}
+                        />
+                    </div>
+                    <div className="self-center">
+                        <span className="block">Hii {user.name}</span>
+                    </div>
+                </div>
+            )}
             <WebsiteDropdown
                 selectedWebsite={selectedWebsite}
                 onChange={setSelectedWebsite}
             />
 
-            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pt-4 pr-2">
+            <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto pt-4 pr-2">
                 {messages.map((msg, idx) => (
-                    <pre
-                        className={`p-3 rounded-xl max-w-[70%] whitespace-pre-wrap break-words ${msg.role === "user"
-                            ? "bg-sky-100 self-end text-right"
-                            : "bg-sky-200 self-start text-left"
-                            }`}
-                    >
-                        {msg.content}
-                    </pre>
+                    <div key={idx} className={`flex gap-4 ${msg.role === "user"
+                        ? "justify-end"
+                        : "justify-start"
+                        }`}>
+                        {msg.role !== "user" && (
+                            <div className="size-10">
+                                <Image
+                                    src="/uploads/default_ai.jpg"
+                                    alt="AI"
+                                    className="size-full rounded-full object-cover"
+                                    width={40} height={40}
+                                />
+                            </div>
+                        )}
+                        <pre
+                            className={`p-3 rounded-xl max-w-[70%] whitespace-pre-wrap break-words ${msg.role === "user"
+                                ? "bg-sky-100 text-right"
+                                : "bg-sky-200 text-left"
+                                }`}
+                        >
+                            {msg.content}
+                        </pre>
+                        {msg.role !== "ai" && (
+                            <div className="size-10">
+                                <Image
+                                    src={user.photo}
+                                    alt={user.name}
+                                    className="size-full rounded-full object-cover"
+                                    width={40} height={40}
+                                />
+                            </div>
+                        )}
+                    </div>
                 ))}
                 {loading && (
                     <div className="text-sky-500 text-sm italic">AI is typing...</div>

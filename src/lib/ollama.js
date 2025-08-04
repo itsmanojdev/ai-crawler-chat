@@ -14,14 +14,14 @@ const getEmbedding = async (chunk) => {
     }
 }
 
-const AIChat = async (websiteID, userQuery) => {
+const AIChat = async (user, websiteID, userQuery) => {
     try {
         const embedding = await getEmbedding(userQuery)
 
         let releventChunks = await embeddingModel.aggregate([
             {
                 $vectorSearch: {
-                    index: 'vector_index', // Replace with your index name
+                    index: 'vector_index', // index name
                     path: 'embedding',
                     queryVector: embedding,
                     numCandidates: 100, // Number of candidates to consider
@@ -35,7 +35,9 @@ const AIChat = async (websiteID, userQuery) => {
         releventChunks = releventChunks.map(record => record.chunk).join("\n");
 
 
-        let prompt = `Answer the Question only using the content provide.
+        let prompt = `
+            Answer the Question only using the content provide.
+            ${typeof user.name !== undefined ? `User Name: ${user.name}` : ''}
             Question: ${userQuery}
             content: ${releventChunks}
             `

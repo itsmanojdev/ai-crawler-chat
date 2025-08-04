@@ -2,6 +2,7 @@ import { Rubik, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./Components/ui/Navigation";
 import { connectdb } from "../lib/mongodb";
+import { ChatProvider } from "./context/ChatContext";
 
 
 export const inter = Inter({ subsets: ['latin'] });
@@ -28,7 +29,9 @@ export default async function RootLayout({ children }) {
         </header>
 
         <main className="px-8 py-4 flex-1 flex flex-col sm:px-16">
-          {children}
+          <ChatProvider>
+            {children}
+          </ChatProvider>
         </main>
       </body>
     </html>

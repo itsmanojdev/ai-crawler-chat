@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { CRAWL_STATUS, CRAWL_TYPE } from "../constants.js";
 
 const embeddingSchema = mongoose.Schema({
     domain: {

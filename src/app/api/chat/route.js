@@ -1,20 +1,22 @@
 import { AIChat } from "../../../lib/ollama";
+import { NextResponse } from "next/server";
+
 
 export async function POST(req) {
     try {
-        const { websiteId, query } = await req.json();
+        const { user, websiteId, query } = await req.json();
         console.log("in api", websiteId, query)
         if (!query || !websiteId) {
-            return Response.json({ error: "Missing Input or website" }, { status: 400 });
+            return NextResponse.json({ error: "Missing Input or website" }, { status: 400 });
         }
 
-        const response = await AIChat(websiteId, query)
+        const response = await AIChat(user, websiteId, query)
 
         // Return JSON response
-        return Response.json({ response }, { status: 200 });
+        return NextResponse.json({ response }, { status: 200 });
 
     } catch (error) {
         console.error("Error in /api/chat:", error);
-        return Response.json({ error: "Server error" }, { status: 500 });
+        return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
 }
