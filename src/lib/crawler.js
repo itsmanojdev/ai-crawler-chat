@@ -1,8 +1,9 @@
 import { getWebsites } from "./chat.js"
 import puppeteer from 'puppeteer'
-import { CRAWL_STATUS, CRAWL_TYPE } from "../constants.js"
+import { CRAWL_LIMIT, CRAWL_STATUS, CRAWL_TYPE } from "../constants.js"
 import websiteModel from "../models/websiteModel.js";
-import { normalizeURL } from "@/utils.js";
+import { getChuncks, normalizeURL } from "@/utils.js";
+import { getAndSaveEmbeddings } from "./ollama.js";
 
 let defaultURLs = [
     {
@@ -22,58 +23,74 @@ let defaultURLs = [
     }
 ]
 
-const crawlPage = async (website, baseURL) => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    const urlObj = new URL(website);
+const crawlPage = async (website, baseWebsite, getLinks = false, downloadImgs = false) => {
+    let response = {}
+    let baseURL = baseWebsite.website_url
+
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
 
     await page.goto(website, { waitUntil: 'networkidle2' });
 
     // Download Images
 
     // Get HyperLinks
-    let links = await page.$$eval('a', links => links.map(link => {
-        link = link.href
-        if (link.startsWith("/")) {
-            // Relative url
-            return normalizeURL(`${baseURL}${link}`)
-        } else {
-            // Absolute url
-            return normalizeURL(`${link}`)
-        }
-    }))
+    if (getLinks) {
+        let links = await page.$$eval('a', links => links.map(link => {
+            link = link.href
+            if (link.startsWith("/")) {
+                // Relative url
+                return normalizeURL(`${baseURL}${link}`)
+            } else {
+                // Absolute url
+                return normalizeURL(`${link}`)
+            }
+        }))
 
-    // Filter URLs of same domain
-    links.filter(link => {
-        let baseURLObj = new URL(baseURL)
-        let linkObj = new URL(link)
-        return baseURLObj.hostname == linkObj.hostname
-    })
+        // Filter URLs of same domain
+        links.filter(link => {
+            let baseURLObj = new URL(baseURL)
+            let linkObj = new URL(link)
+            return baseURLObj.hostname == linkObj.hostname
+        })
+
+        response.links = links
+    }
+
 
     // Get body in text format
     const bodyText = await page.evaluate(() => {
         return document.body.innerText
     });
 
-    let chunck = getChuncks(bodyText)
+    let chuncks = getChuncks(bodyText)
+    getAndSaveEmbeddings(website, baseWebsite, chuncks)
 
-
-    return links
+    return response
 }
 
-const crawlWebsite = async (website, crawl_type = CRAWL_TYPE.PAGE) => {
-    console.log(`Crawling: ${website}`);
-    if (crawl_type == CRAWL_TYPE.DOMAIN) {
-        let urls = [website]
-        let visitedURL = []
-        let crawlLimit = 50
+const crawlWebsite = async (website) => {
+    if (website.crawl_type == CRAWL_TYPE.DOMAIN) {
+        let urls = [website.website_url]
+        let visitedURLs = []
 
-        while (!urls.length && visitedURL.length <= 50) {
-            await crawlPage(website)
+        while (!urls.length && visitedURLs.length <= CRAWL_LIMIT) {
+            let currWebsite = urls.shift()
+            console.log(`Crawling: ${currWebsite}`);
+            let crawlResponse = await crawlPage(currWebsite, website, true)
+            let links = crawlResponse.links !== undefined ? crawlResponse.links : []
+
+            links.forEach(link => {
+                if (!urls.includes(link) && !visitedURLs.includes(link)) {
+                    urls.push(link)
+                }
+            })
+
+            visitedURLs.push(currWebsite)
         }
-
     } else {
-
+        console.log(`Crawling: ${website.website_url}`);
+        await crawlPage(website.website_url, website)
     }
 }
 
@@ -81,7 +98,7 @@ export const crawler = async (urls = []) => {
     urls = urls.length ? urls : defaultURLs
 
     for (let site of urls) {
-        website_url = (typeof site === 'object') ? site.website_url : site
+        website_url = (typeof site === 'object') ? normalizeURL(site.website_url) : normalizeURL(site)
         const existing = await websiteModel.findOne({ website_url })
 
         // If record already exist is the db, check status and crawl accordingly
