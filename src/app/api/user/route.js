@@ -26,7 +26,7 @@ export async function POST(req) {
     const name = formData.get("name");
     const email = formData.get("email");
     const image = formData.get("image");
-    console.log("data", formData);
+    let filename
 
     if (!name || !email) {
         return NextResponse.json({ error: "Missing Name/Email fields" }, { status: 400 });
@@ -40,17 +40,15 @@ export async function POST(req) {
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
-        console.log("Existing", existingUser);
-
+        if (image) {
+            filename = await imageUpload(image)
+            existingUser.photo = `/uploads/${filename}`
+            await existingUser.save()
+        }
         return NextResponse.json({ user: existingUser });
     }
-
-    // Handle image upload
     if (image) {
-        const buffer = Buffer.from(await image.arrayBuffer());
-        const filename = `${uuid()}_${image.name}`;
-        const filepath = path.join(process.cwd(), "public/uploads", filename);
-        await writeFile(filepath, buffer);
+        filename = await imageUpload(image)
     }
 
     // Save new user
@@ -61,4 +59,18 @@ export async function POST(req) {
     });
 
     return NextResponse.json({ user: newUser });
+}
+
+const imageUpload = async (image) => {
+    try {
+        // Handle image upload
+        const buffer = Buffer.from(await image.arrayBuffer());
+        const filename = `${uuid()}_${image.name}`;
+        const filepath = path.join(process.cwd(), "public/uploads", filename);
+        await writeFile(filepath, buffer);
+        return filename
+    } catch (error) {
+        console.log("Image upload fail: ", error);
+        return NextResponse.json({ error: "Image upload fail" }, { status: 400 });
+    }
 }
