@@ -14,7 +14,11 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  console.log("conneting...");
+
   await connectdb()
+  console.log("connected");
+
 
   return (
     <html lang="en">
