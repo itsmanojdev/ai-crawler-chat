@@ -80,7 +80,7 @@ const UserFormPage = () => {
                     </div>
                 )}
 
-                <label className="block mb-2 text-sky-600">Name</label>
+                <label className="block mb-2 text-sky-600 ast">Name</label>
                 <input
                     type="text"
                     required
@@ -89,7 +89,7 @@ const UserFormPage = () => {
                     onChange={(e) => setName(e.target.value)}
                 />
 
-                <label className="block mb-2 text-sky-600">Email</label>
+                <label className="block mb-2 text-sky-600 ast">Email</label>
                 <input
                     type="email"
                     required

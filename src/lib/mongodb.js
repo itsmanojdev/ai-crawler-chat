@@ -3,15 +3,24 @@
 import mongoose from "mongoose"
 import 'dotenv/config'
 
+let cached = global.mongoose || { conn: null, promise: null };
+
+// Database Connection
 const connectdb = async () => {
-    // Database Connection
-    try {
-        console.log("MonogoDB Connecting...")
-        await mongoose.connect(process.env.MONGODB_URL)
-        console.log("MonogoDB Connection Success")
-    } catch (error) {
-        console.log("ERROR while connecting to DB: ", error.message)
+    if (cached.conn) return cached.conn;
+
+    if (!cached.promise) {
+        try {
+            console.log("MonogoDB Connecting...")
+            cached.promise = await mongoose.connect(process.env.MONGODB_URL)
+            console.log("MonogoDB Connection Success")
+        } catch (error) {
+            console.log("ERROR while connecting to DB: ", error.message)
+        }
+
     }
+    cached.conn = await cached.promise;
+    return cached.conn;
 }
 
 const disconnectdb = () => {

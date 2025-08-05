@@ -34,10 +34,12 @@ export default function Dashboard() {
               <p className="text-3xl">{analytics.totalUsers}</p>
             </div>
           }
-          <div className="bg-sky-100 text-sky-900 p-4 rounded-xl shadow">
-            <h2 className="text-xl font-semibold">Total Queries</h2>
-            <p className="text-3xl">{analytics.totalQueries}</p>
-          </div>
+          {analytics.totalQueries &&
+            <div className="bg-sky-100 text-sky-900 p-4 rounded-xl shadow">
+              <h2 className="text-xl font-semibold">Total Queries</h2>
+              <p className="text-3xl">{analytics.totalQueries}</p>
+            </div>
+          }
         </div>
       }
     </div>

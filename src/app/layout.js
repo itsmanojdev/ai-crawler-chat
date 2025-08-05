@@ -1,7 +1,6 @@
 import { Rubik, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "./Components/ui/Navigation";
-import { connectdb } from "../lib/mongodb";
 import { ChatProvider } from "./context/ChatContext";
 
 
@@ -14,12 +13,6 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  console.log("conneting...");
-
-  await connectdb()
-  console.log("connected");
-
-
   return (
     <html lang="en">
       <head>

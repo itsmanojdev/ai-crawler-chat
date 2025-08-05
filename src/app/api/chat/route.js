@@ -1,10 +1,13 @@
 import { AIChat } from "../../../lib/ollama";
 import { NextResponse } from "next/server";
 import userModel from "../../../models/userModel";
+import { connectdb } from "../../../lib/mongodb";
 
 
 export async function POST(req) {
     try {
+        await connectdb()
+
         const { user, websiteId, query } = await req.json();
 
         if (typeof user.name !== undefined) {

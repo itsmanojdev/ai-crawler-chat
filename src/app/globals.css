@@ -33,3 +33,9 @@ body {
 .animate {
     @apply transition duration-300 ease-in-out;
 }
+
+/* For Required Form Field */
+.ast::after {
+    content: " *";
+    color: red;
+}
