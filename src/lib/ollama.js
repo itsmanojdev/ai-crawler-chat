@@ -2,6 +2,7 @@ import embeddingModel from "../models/embeddingModel.js"
 import ollama from 'ollama'
 import mongoose from "mongoose"
 import OpenAI from "openai"
+import { embed } from '@nomic-ai/atlas';
 
 const getEmbedding = async (chunk) => {
     try {
@@ -15,9 +16,16 @@ const getEmbedding = async (chunk) => {
     }
 }
 
+const getAtlasNomicEmbed = async (text) => {
+    const embedding = await embed(text)
+    console.log("Nomic Atlas", embedding)
+    return embedding
+}
+
 const AIChat = async (user, websiteID, userQuery) => {
     try {
-        const embedding = await getEmbedding(userQuery)
+        // const embedding = await getEmbedding(userQuery)
+        const embedding = await getAtlasNomicEmbed(userQuery)
 
         let releventChunks = await embeddingModel.aggregate([
             {
@@ -44,6 +52,7 @@ const AIChat = async (user, websiteID, userQuery) => {
             `
         console.log('AI')
 
+        // const response = await llamaModel(prompt);
         const response = await openAIModel(prompt);
 
         return response
@@ -86,5 +95,6 @@ const openAIModel = async (prompt) => {
 
 export {
     getEmbedding,
+    getAtlasNomicEmbed,
     AIChat
 }

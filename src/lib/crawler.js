@@ -4,7 +4,7 @@ import { CRAWL_LIMIT, CRAWL_STATUS, CRAWL_TYPE } from "../constants.js"
 import websiteModel from "../models/websiteModel.js";
 import embeddingModel from "../models/embeddingModel.js";
 import { getChunks, normalizeURL } from "../utils.js";
-import { getEmbedding } from "./ollama.js";
+import { getEmbedding, getAtlasNomicEmbed } from "./ollama.js";
 
 let defaultURLs = [
     {
@@ -94,7 +94,8 @@ const getAndSaveEmbeddings = async (website, baseWebsite, chunks) => {
         }
 
         for (let i = 0; i < chunks.length; i++) {
-            let embedding = await getEmbedding(chunks[i]);
+            // let embedding = await getEmbedding(chunks[i]);
+            let embedding = await getAtlasNomicEmbed(chunks[i]);
 
             // Insert into MongoDB
             await embeddingModel.create({
