@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 
 export default function WebsiteDropdown({ selectedWebsite, onChange }) {
-    console.log("selectedWebsite", selectedWebsite);
-
     const [websites, setWebsites] = useState([]);
     const [loading, setLoading] = useState(true);
 
