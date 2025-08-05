@@ -3,7 +3,7 @@ const Logo = ({ className }) => {
         <>
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                 width="100%" height="100%" viewBox="0 0 300.000000 300.000000"
-                preserveAspectRatio="xMidYMid meet" className={`p-1 ${className}`}>
+                preserveAspectRatio="xMidYMid meet" className={`${className}`}>
                 <metadata>
                     Created by potrace 1.10, written by Peter Selinger 2001-2011
                 </metadata>

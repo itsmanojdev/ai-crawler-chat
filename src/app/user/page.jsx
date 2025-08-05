@@ -51,10 +51,9 @@ const UserFormPage = () => {
     };
 
     return (
-        <div className="flex flex-col gap-4 mt-6">
+        <div className="w-full max-w-150 flex flex-col self-center gap-4 bg-white p-6 rounded-2xl shadow-md border border-sky-200 mt-12">
             <form
                 onSubmit={handleSubmit}
-                className="self-center bg-white p-6 rounded-2xl shadow-lg w-150 border border-sky-200"
             >
                 <h2 className="text-xl font-semibold text-sky-600 mb-4">Profile</h2>
                 {user && (

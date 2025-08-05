@@ -7,8 +7,10 @@ export default function Navigation() {
         <nav className="bg-sky-900 text-white shadow-md text-lg">
             <div className="mx-auto h-[48px] flex px-8 md:px-16">
                 <div className="flex gap-8">
-                    <Link href="/" className="animate">
-                        <Logo className="text-white" />
+                    <Link href="/">
+                        <div className="pt-1 w-10">
+                            <Logo className="text-white" />
+                        </div>
                     </Link>
                     <div className="flex gap-4">
                         <NavLink href="/" text="Home" />
