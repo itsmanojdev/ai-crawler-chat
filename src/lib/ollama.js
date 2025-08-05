@@ -18,7 +18,6 @@ const getEmbedding = async (chunk) => {
 
 const getAtlasNomicEmbed = async (text) => {
     const embedding = await embed(text)
-    console.log("Nomic Atlas", embedding)
     return embedding
 }
 
