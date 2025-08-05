@@ -12,16 +12,16 @@ A full-stack AI-powered web application that crawls predefined websites, stores 
 **Tailwind CSS:** Provides rapid, utility-first styling that keeps UI clean, consistent, and easy to maintain.
 
 ### Backend 
-**Node.js (Next.js API routes):** Enables writing scalable backend logic including the web crawler and AI communication with Ollama.
+**Node.js (Next.js API routes):** Enables writing scalable backend logic including the web crawler and AI communication with OpenAI.
 
 ### Database 
 **MongoDB:** Its native support for vector search via Atlas or local plugin makes it an ideal store for embedding-based retrieval systems.
 
 ### AI Models 
-Local inference allows unlimited queries, reduces cost, and enables privacy. The combo of embedding + language model provides a production-capable retrieval-augmented generation (RAG) system.
-- [`ollama`](https://ollama.com): Local LLM for inference
-    - `llama3.2:3b` – for answering user queries
-    - `nomic-embed-text` – for generating vector embeddings from website content and user queries 
+This project uses online models to answer user queries with high accuracy and performance. The combination of vector embeddings and language models powers a production-ready retrieval-augmented generation (RAG) system.
+
+- `OpenAI GPT-4.1`: Using the GitHub model for answering user queries
+- `nomic-embed-text`: Using Atlas Nomic to generate vector embeddings from website content and user queries
 
 ---
 
@@ -29,9 +29,8 @@ Local inference allows unlimited queries, reduces cost, and enables privacy. The
 
 > 💻 Recommended System Specs:
 - 8 GB RAM (minimum)
-- 10 GB+ Disk space (for model storage)
 - Node.js v18+ and MongoDB 7.0+ (with `vectorSearch` enabled)
-- Ollama installed locally (`https://ollama.com/download`)
+- Next.js v 15.4.5
 
 ### 1. Clone the repository
 
@@ -55,18 +54,19 @@ MONGODB_URI=mongodb://localhost:27017/your-db-name
 ```
 
 - Ensure MongoDB is running and has [vector indexing](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/vector-search-quick-start/?tck=ai_as_web) enabled.
-- Make sure Ollama is running locally.
-
-### 4. Install Ollama
-
-Install from [`ollama`](https://ollama.com)
-
-After installation
 
 ```bash
-ollama run llama3.2
-ollama pull nomic-embed-text
+GITHUB_TOKEN=< GITHUB_TOKEN >
 ```
+
+- Get from GitHub: Generate Token.
+- Model URL: https://github.com/marketplace/models/azure-openai/gpt-4-1
+
+```bash
+ATLAS_API_KEY=< ATLAS_API_KEY >
+```
+
+- Get from Atlas Nomic
 
 ### 4. Start the development server
 
@@ -108,9 +108,9 @@ Each website is tracked with **crawl statuses**:
 
 ### ✅ Part 2: AI Component
 
-- **Powered by**: [Ollama](https://ollama.com) (runs locally)
+- **Powered by**: `OpenAI`
 - **Embeddings via**: `nomic-embed-text`
-- **Query answering via**: `llama3.2:3b`
+- **Query answering via**: `OpenAI GPT-4.1`
 
 **Flow**:
 
@@ -121,7 +121,7 @@ Each website is tracked with **crawl statuses**:
    - User name
    - Retrieved content
    - User query
-5. Prompt is sent to the local `llama3.2` model.
+5. Prompt is sent to the OpenAI GPT4.1 model.
 6. Response is shown via the **Chat UI**.
 
 ---
