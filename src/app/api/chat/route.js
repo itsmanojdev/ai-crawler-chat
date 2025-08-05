@@ -2,20 +2,20 @@ import { AIChat } from "../../../lib/ollama";
 import { NextResponse } from "next/server";
 import userModel from "../../../models/userModel";
 import { connectdb } from "../../../lib/mongodb";
+import { GUEST_ID } from "@/constants";
 
 
 export async function POST(req) {
     try {
         await connectdb()
-
         const { user, websiteId, query } = await req.json();
 
-        if (typeof user.name !== undefined) {
+        if (user._id) {
             const userRec = await userModel.findOne({ _id: user._id });
             userRec.queries = userRec.queries + 1
             await userRec.save()
         } else {
-            const userRec = await userModel.findOne({ name: "Guest" });
+            const userRec = await userModel.findOne({ _id: GUEST_ID });   // Guest Record - Increment guest query, if user is not logged
             userRec.queries = userRec.queries + 1
             await userRec.save()
         }

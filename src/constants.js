@@ -12,8 +12,11 @@ const CRAWL_TYPE = {
 
 const CRAWL_LIMIT = 10  // Deep of recursive crawl
 
+const GUEST_ID = "6890dc03237728a70b7b1e6e"
+
 export {
     CRAWL_STATUS,
     CRAWL_TYPE,
-    CRAWL_LIMIT
+    CRAWL_LIMIT,
+    GUEST_ID
 }
