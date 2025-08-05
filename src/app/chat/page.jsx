@@ -54,7 +54,7 @@ export default function ChatPage() {
     return (
         <div className="w-full flex flex-col gap-4 bg-white p-6 rounded-2xl shadow-md border border-sky-200">
             <div className="text-xl font-semibold text-sky-700">AI Chat Assistant</div>
-            {user && (
+            {user?.name && (
                 <div className="flex gap-2 bg-sky-100 border border-sky-400 text-sky-700 px-4 py-3 mb-4 rounded">
                     <div className="size-8">
                         <Image
