@@ -39,7 +39,7 @@ export async function POST(req) {
             return NextResponse.json({ error: "Missing Name/Email fields" }, { status: 400 });
         }
 
-        if (!ALLOWED_IMG_TYPES.includes(image.type)) {
+        if (image && !ALLOWED_IMG_TYPES.includes(image.type)) {
             return NextResponse.json({ error: "Invalid image type. Allowed types: JPG, PNG, JPEG." }, { status: 400 });
         }
 
@@ -50,8 +50,10 @@ export async function POST(req) {
             if (image) {
                 imageURL = await imageUploadVercel(image)
                 existingUser.photo = imageURL;
-                await existingUser.save();
             }
+            existingUser.name = name
+            await existingUser.save();
+
             return NextResponse.json({ user: existingUser });
         }
 
