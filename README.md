@@ -2,6 +2,16 @@
 
 A full-stack AI-powered web application that crawls predefined websites, stores their content, allows users to query the data through a chat interface, and displays usage analytics on a dashboard. Users can also personalize the chat experience by submitting their name and photo.
 
+✅ Developed a full-stack AI-powered web app with a custom web crawler, personalized chat system, and real-time analytics dashboard using Next.js, Node.js, MongoDB, and OpenAI GPT-4.1.
+
+✅ Built a high-performance web crawler with Puppeteer, extracting, chunking, and embedding web content into MongoDB via nomic-embed-text, powering retrieval-augmented generation (RAG) with precision.
+
+✅ Engineered a personalized AI chat system leveraging vector similarity search + GPT-4.1, enabling context-aware, human-like interactions with crawled website data.
+
+✅ Delivered a modern, responsive UI using Next.js and Tailwind CSS, enhancing performance, user experience, and maintainability.
+
+✅ Integrated user profile management (name, email, photo) to personalize the chat experience and enable usage tracking for richer analytics.
+
 ---
 
 ## Live Demo
