@@ -55,7 +55,8 @@ const UserFormPage = () => {
             <form
                 onSubmit={handleSubmit}
             >
-                <h2 className="text-xl font-semibold text-sky-600 mb-4">Profile</h2>
+                <h2 className="text-xl font-semibold text-sky-600">Profile</h2>
+                <p className="text-sky-600 text-sm italic mb-4">Enter your details to log in or update your profile. If your email already exists, your name and photo will be updated.</p>
                 {user && (
                     <div className="flex gap-2 bg-sky-100 border border-sky-400 text-sky-700 text-sm px-4 py-3 mb-4 rounded">
                         <div className="size-15">
